@@ -25,7 +25,13 @@ actual_branch:
 	pushq	%rbp
 	movq	%rsp, %rbp
 
+	cmp $0, %rsi
+	je notTaken
+
 	
+	notTaken:
+
+
 
 	movq	%rbp, %rsp
 	popq	%rbp
