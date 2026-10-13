@@ -58,7 +58,7 @@ actual_branch:
 
 	andq $2047, %rdi
 	addb $1, frequencyArray(%rdi) #increase our 2 bit counter for the prediction
-	cmp $4, frequencyArray(%rdi) #if we are already at stong taken we stop counting
+	cmpb $4, frequencyArray(%rdi) #if we are already at stong taken we stop counting
 	jl ending
 
 	subb $1, frequencyArray(%rdi) #we go back to 3 and make sure not to wrap around
@@ -67,10 +67,10 @@ actual_branch:
 	notTaken:
 		andq $2047, %rdi
 		subb $1, frequencyArray(%rdi) #increase our 2 bit counter for the prediction
-		cmp $-1, frequencyArray(%rdi) #if we are already at stong taken we stop counting
+		cmpb $-1, frequencyArray(%rdi) #if we are already at stong taken we stop counting
 		jg ending
 
-		addb $1, frequencyArray(%rdi) #we go back to 3 and make sure not to wrap around
+		addb $1, frequencyArray(%rdi) #we go back to 0 and make sure not to wrap around
 		jmp ending
 
 
