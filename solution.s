@@ -6,6 +6,8 @@ frequencyArray:
 .global actual_branch
 .global init
 
+.text
+
 init:
 
 	pushq	%rbp
@@ -54,21 +56,25 @@ actual_branch:
 	cmp $0, %rsi #if the branch was not taken
 	je notTaken 
 
-	movq $0, %rdx #prepare for mod
-	movq %rdi, %rax #put the address in rax to be moduloed by the size of our array
-	divq $2048
+	andq $2047, %rdi
+	addb $1, frequencyArray(%rdi) #increase our 2 bit counter for the prediction
+	cmp $4, frequencyArray(%rdi) #if we are already at stong taken we stop counting
+	jl ending
 
-	addb $1, (%rdx) #increase our 2 bit counter for the prediction
+	subb $1, frequencyArray(%rdi) #we go back to 3 and make sure not to wrap around
+	jmp ending
 
 	notTaken:
-		movq $0, %rdx #prepare for mod
-		movq %rdi, %rax #put the address in rax to be moduloed by the size of our array
-		divq $2048
+		andq $2047, %rdi
+		subb $1, frequencyArray(%rdi) #increase our 2 bit counter for the prediction
+		cmp $-1, frequencyArray(%rdi) #if we are already at stong taken we stop counting
+		jg ending
 
-		subb $1, (%rdx) #decrease our 2 bit counter for the prediction
+		addb $1, frequencyArray(%rdi) #we go back to 3 and make sure not to wrap around
+		jmp ending
 
 
-
-	movq	%rbp, %rsp
-	popq	%rbp
-	ret
+	ending:
+		movq	%rbp, %rsp
+		popq	%rbp
+		ret
