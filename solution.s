@@ -40,11 +40,21 @@ actual_branch:
 	pushq	%rbp
 	movq	%rsp, %rbp
 
-	cmp $0, %rsi
-	je notTaken
+	cmp $0, %rsi #if the branch was not taken
+	je notTaken 
 
-	
+	movq $0, %rdx #prepare for mod
+	movq %rdi, %rax #put the address in rax to be moduloed by the size of our array
+	divq $2048
+
+	addb $1, (%rdx) #increase our 2 bit counter for the prediction
+
 	notTaken:
+		movq $0, %rdx #prepare for mod
+		movq %rdi, %rax #put the address in rax to be moduloed by the size of our array
+		divq $2048
+
+		subb $1, (%rdx) #decrease our 2 bit counter for the prediction
 
 
 
