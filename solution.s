@@ -7,8 +7,6 @@ frequencyArray:
 .global init
 
 init:
-	pushq	%rbp
-	movq	%rsp, %rbp
 
 	pushq	%rbp
 	movq	%rsp, %rbp
@@ -26,9 +24,6 @@ init:
 	popq	%rbp
 	ret
 
-	movq	%rbp, %rsp
-	popq	%rbp
-	ret
 
 predict_branch:
 	pushq	%rbp
