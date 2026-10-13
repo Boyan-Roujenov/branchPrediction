@@ -36,6 +36,15 @@ predict_branch:
 
 	movq $1, %rax
 
+	andq $2047, %rdi # take the remainder of the address modulo 2048. We do that by anding all bits undero 2048 with the number 2047 which is something like 0000011111111111
+	cmpq $2, frequencyArray(%rdi) #check whether the frequency is lower than 2
+	jl weakOrStrongSkip
+	#weak or Strong Jump:
+	
+
+	weakOrStrongSkip:
+
+
 	movq	%rbp, %rsp
 	popq	%rbp
 	ret
